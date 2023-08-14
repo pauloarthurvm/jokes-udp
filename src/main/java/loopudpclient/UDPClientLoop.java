@@ -1,11 +1,11 @@
-package threadudpclient;
+package loopudpclient;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-public class UDPClientThread {
+public class UDPClientLoop {
 
     private static DatagramPacket dgPacketRequest;
     private static DatagramPacket dgPacketResponse;
@@ -18,11 +18,15 @@ public class UDPClientThread {
 //   QOTD port: 17
 
     public static void main(String[] args) {
-
-        sendPacket();
-        String quote = receivePacket();
-        System.out.println(quote);
-
+        while (true) {
+            sendPacket();
+            String quote = receivePacket();
+            System.out.println(quote);
+            if (quote.equals("No more jokes...")) {
+                break;
+            }
+        }
+        dgSocket.close();
     }
 
     private static String receivePacket() {

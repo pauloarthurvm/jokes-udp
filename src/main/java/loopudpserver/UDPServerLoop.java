@@ -1,4 +1,4 @@
-package threadudpserver;
+package loopudpserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UDPServerThread {
+public class UDPServerLoop {
 
     static DatagramPacket dgPacketRequest;
     static DatagramPacket dgPacketResponse;
@@ -33,6 +33,7 @@ public class UDPServerThread {
 
                 dgPacketRequest = new DatagramPacket(buffer, buffer.length);
                 dgSocketServer.receive(dgPacketRequest);
+                System.out.println(new String(buffer, 0, dgPacketRequest.getLength()));
                 InetAddress clientAddress = dgPacketRequest.getAddress();
                 int clientPort = dgPacketRequest.getPort();
 
@@ -47,6 +48,7 @@ public class UDPServerThread {
 
                 dgPacketResponse = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
                 dgSocketServer.send(dgPacketResponse);
+                dgSocketServer.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -55,7 +57,7 @@ public class UDPServerThread {
 
     private static void readJokes() {
         jokes = new ArrayList<>();
-        InputStream inputStream = UDPServerThread.class.getClassLoader().getResourceAsStream("jokes.txt");
+        InputStream inputStream = UDPServerLoop.class.getClassLoader().getResourceAsStream("jokes.txt");
 //        InputStream in = UDPServer.class.getResourceAsStream("jokes.txt");
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
