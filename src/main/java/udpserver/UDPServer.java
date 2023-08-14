@@ -28,6 +28,7 @@ public class UDPServer {
 
             dgPacketRequest = new DatagramPacket(buffer, buffer.length);
             dgSocketServer.receive(dgPacketRequest);
+            System.out.println(new String(buffer, 0, dgPacketRequest.getLength()));
             InetAddress clientAddress = dgPacketRequest.getAddress();
             int clientPort = dgPacketRequest.getPort();
 
